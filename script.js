@@ -124,6 +124,23 @@ canvas.addEventListener("mousedown",startDraw);
 canvas.addEventListener("mousemove",drawing);
 canvas.addEventListener("mouseup",()=> isDrawing=false);
 
-canvas.addEventListener("touchstart",startDraw);
-canvas.addEventListener("touchmove",drawing);
+canvas.addEventListener("touchstart",function (e) {
+    isDrawing=true;
+    prevMouseX=e.touches[0].clientX;
+    prevMouseY=e.touches[0].clientY;
+    ctx.beginPath();
+    ctx.lineWidth=brushWidth;
+    ctx.strokeStyle=selectedColor;
+    ctx.fillStyle=selectedColor;
+    snapshot=ctx.getImageData(0,0,canvas.width,canvas.height);
+    
+});
+canvas.addEventListener("touchmove", function (e) {
+  var touch = e.touches[0];
+  var mouseEvent = new MouseEvent("mousemove", {
+    clientX: touch.clientX,
+    clientY: touch.clientY
+  });
+  canvas.dispatchEvent(mouseEvent);
+}, false);
 canvas.addEventListener("touchend",()=> isDrawing=false);
